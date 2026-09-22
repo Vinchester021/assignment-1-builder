@@ -161,6 +161,76 @@ public class SmartHomeConfiguration {
 
 
         }
+        private void validate() {
+            if (homeName == null || homeName.isBlank()) {
+                throw new IllegalArgumentException("Home name cannot be empty");
+            }
+
+            if (ownerName == null || ownerName.isBlank()) {
+                throw new IllegalArgumentException("Owner name cannot be empty");
+            }
+
+            if (roomCount < 1 || roomCount > 50) {
+                throw new IllegalArgumentException(
+                        "Room count must be between 1 and 50"
+                );
+            }
+
+            if (mode == null) {
+                throw new IllegalArgumentException("Home mode cannot be null");
+            }
+
+            if (targetTemperature < 5 || targetTemperature > 35) {
+                throw new IllegalArgumentException(
+                        "Target temperature must be between 5 and 35"
+                );
+            }
+
+            if (cameraCount < 0) {
+                throw new IllegalArgumentException(
+                        "Camera count cannot be negative"
+                );
+            }
+
+            if (vacationDays < 0 || vacationDays > 365) {
+                throw new IllegalArgumentException(
+                        "Vacation days must be between 0 and 365"
+                );
+            }
+
+            if (notifications == null) {
+                throw new IllegalArgumentException(
+                        "Notification settings cannot be null"
+                );
+            }
+
+            if (mode == HomeMode.VACATION) {
+                if (!smartLockEnabled) {
+                    throw new IllegalArgumentException(
+                            "VACATION mode requires smart lock"
+                    );
+                }
+
+                if (!motionSensorEnabled) {
+                    throw new IllegalArgumentException(
+                            "VACATION mode requires motion sensor"
+                    );
+                }
+
+                if (!notifications.isEnabled()) {
+                    throw new IllegalArgumentException(
+                            "VACATION mode requires emergency notifications"
+                    );
+                }
+            }
+
+            if (vacationDays > 7 && !automaticWaterShutoffEnabled) {
+                throw new IllegalArgumentException(
+                        "Vacation longer than 7 days requires automatic water shutoff"
+                );
+            }
+        }
+
         public Builder targetTemperature(double targetTemperature) {
             this.targetTemperature = targetTemperature;
             return this;
@@ -214,6 +284,8 @@ public class SmartHomeConfiguration {
         }
 
         public SmartHomeConfiguration build() {
+            validate();
+
             return new SmartHomeConfiguration(
                     homeName,
                     ownerName,
@@ -231,5 +303,6 @@ public class SmartHomeConfiguration {
                     notifications
             );
         }
+
     }
 }
