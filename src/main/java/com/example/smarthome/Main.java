@@ -12,22 +12,23 @@ public class Main {
                 );
 
         SmartHomeConfiguration home =
-                new SmartHomeConfiguration(
+                new SmartHomeConfiguration.Builder(
                         "Smart Villa",
                         "Vilgelm",
                         5,
-                        HomeMode.VACATION,
-                        20.0,
-                        true,
-                        true,
-                        4,
-                        true,
-                        true,
-                        true,
-                        false,
-                        14,
-                        notifications
-                );
+                        HomeMode.VACATION
+                )
+                        .targetTemperature(20.0)
+                        .smartLockEnabled(true)
+                        .motionSensorEnabled(true)
+                        .cameraCount(4)
+                        .smokeDetectorEnabled(true)
+                        .waterLeakSensorEnabled(true)
+                        .automaticWaterShutoffEnabled(true)
+                        .energySavingEnabled(false)
+                        .vacationDays(14)
+                        .notifications(notifications)
+                        .build();
 
         System.out.println("Smart Home Configuration:");
         System.out.println(home);
