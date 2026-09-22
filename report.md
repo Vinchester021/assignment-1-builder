@@ -257,7 +257,7 @@ mvn clean test
 
 ## 12. UML Diagram
 
-The UML diagram shows relationships between:
+The UML diagram presents the structure of the Builder pattern and the relationships between:
 
 - `SmartHomeConfiguration`;
 - `Builder`;
@@ -265,13 +265,90 @@ The UML diagram shows relationships between:
 - `HomeMode`;
 - `SmartHomeDirector`.
 
-The diagram is located in:
+![Builder UML diagram](docs/builder-uml.png)
 
-```text
-docs/builder-uml.md
+## 13. Design Decision and Rejected Alternative
+
+The selected solution uses a nested static Builder class.
+
+This design was selected because:
+
+- the Builder has access to the private constructor;
+- required and optional properties are clearly separated;
+- the final object remains immutable;
+- validation is performed before object creation;
+- the fluent API improves readability.
+
+An alternative solution was to use a JavaBean with an empty constructor and setter methods:
+
+```java
+SmartHomeConfiguration home = new SmartHomeConfiguration();
+home.setHomeName("Smart Villa");
+home.setRoomCount(5);
+home.setSmartLockEnabled(true);
 ```
 
-## 13. Conclusion
+This alternative was rejected because the object would be mutable and could temporarily exist in an invalid state. A required property could also be forgotten.
+
+Another rejected alternative was using multiple overloaded constructors. It would create many constructor combinations and would not solve the problem of unclear boolean parameters.
+
+The Builder requires additional code and duplicates some fields, but it provides better readability, validation, and object safety.
+
+## 14. Sample Program Output
+
+```text
+=== BASIC PRESET ===
+SmartHomeConfiguration {
+  homeName: 'Basic Apartment',
+  ownerName: 'Vilgelm',
+  roomCount: 2,
+  mode: BASIC,
+  targetTemperature: 22.0,
+  smartLockEnabled: false,
+  motionSensorEnabled: false,
+  cameraCount: 0,
+  smokeDetectorEnabled: true,
+  waterLeakSensorEnabled: false,
+  automaticWaterShutoffEnabled: false,
+  energySavingEnabled: false,
+  vacationDays: 0
+}
+
+=== ENERGY SAVING PRESET ===
+SmartHomeConfiguration {
+  homeName: 'Eco House',
+  ownerName: 'Vilgelm',
+  roomCount: 4,
+  mode: ENERGY_SAVING,
+  targetTemperature: 19.0,
+  energySavingEnabled: true
+}
+
+=== VACATION PRESET ===
+SmartHomeConfiguration {
+  homeName: 'Smart Villa',
+  ownerName: 'Vilgelm',
+  roomCount: 5,
+  mode: VACATION,
+  targetTemperature: 18.0,
+  smartLockEnabled: true,
+  motionSensorEnabled: true,
+  cameraCount: 2,
+  waterLeakSensorEnabled: true,
+  automaticWaterShutoffEnabled: true,
+  energySavingEnabled: true,
+  vacationDays: 14,
+  notifications: enabled
+}
+```
+
+## 15. GitHub Repository
+
+Project repository:
+
+https://github.com/Vinchester021/assignment-1-builder
+
+## 16. Conclusion
 
 The Builder pattern is suitable for objects with many optional properties.
 

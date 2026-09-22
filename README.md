@@ -143,7 +143,7 @@ BUILD SUCCESS
 
 ## UML Diagram
 
-[View the Builder UML diagram](docs/builder-uml.md)
+![Builder UML diagram](docs/builder-uml.png)
 
 ## Project Structure
 
